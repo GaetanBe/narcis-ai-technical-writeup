@@ -1,0 +1,35 @@
+# GitHub Pages configuration
+title: "Narcis.ai Technical Writeup"
+description: "Infrastructure expertise applied to production machine learning systems"
+theme: minima
+
+# Navigation
+header_pages:
+  - README.md
+  - technical-materials.md
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO
+author: "Infrastructure Expert → ML Systems Engineering"
+twitter:
+  card: summary_large_image
+
+# Display settings
+show_excerpts: true
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+
+# GitHub Pages specific
+repository: narcis-ai/technical-writeup
+
+# Google Analytics 4
+google_analytics: G-PLACEHOLDER
