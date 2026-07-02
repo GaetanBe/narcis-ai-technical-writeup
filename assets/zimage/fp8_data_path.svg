@@ -1,5 +1,5 @@
 <svg viewBox="0 0 2000 1500" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Arial, sans-serif">
-  <rect x="0" y="0" width="2000" height="1500" fill="#1a1a1a"/>
+  <rect x="0" y="0" width="2000" height="1500" fill="#ffffff"/>
 
   <!-- Vertical divider -->
   <line x1="1000" y1="90" x2="1000" y2="1330" stroke="#b0b0b8" stroke-width="2" stroke-dasharray="8 6" stroke-opacity="0.6"/>
