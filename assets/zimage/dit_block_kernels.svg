@@ -1,0 +1,158 @@
+<svg viewBox="0 0 1600 2210" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Arial, sans-serif">
+  <rect x="0" y="0" width="1600" height="2210" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="60" y="66" fill="#1a1a1a" font-size="26" font-weight="bold">One Z-Image DiT Block (×30 identical)</text>
+  <text x="60" y="96" fill="#5a5a62" font-size="16">hidden_dim=3840 · 30 heads · head_dim=128 · FFN=10240 (SwiGLU)</text>
+
+  <!-- Vertical spine line (drawn first, boxes sit on top) -->
+  <line x1="590" y1="150" x2="590" y2="1980" stroke="#cfcfd6" stroke-width="2"/>
+
+  <!-- ===================== K0 fusion region ===================== -->
+  <rect x="220" y="150" width="740" height="230" rx="10" fill="#2e9e57" fill-opacity="0.18" stroke="#2e9e57" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="238" y="178" fill="#1a1a1a" font-size="16" font-weight="bold">K0</text>
+
+  <rect x="330" y="192" width="520" height="56" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="226" fill="#1a1a1a" font-size="18" text-anchor="middle">RMSNorm</text>
+
+  <rect x="330" y="262" width="520" height="56" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="296" fill="#1a1a1a" font-size="18" text-anchor="middle">adaLN modulate</text>
+
+  <rect x="330" y="332" width="520" height="56" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="366" fill="#1a1a1a" font-size="18" text-anchor="middle">FP8 row quant</text>
+
+  <!-- ===================== GEMM: to_Q/to_K/to_V ===================== -->
+  <rect x="290" y="420" width="600" height="88" rx="6" fill="#e8efff" stroke="#5b8def" stroke-width="2"/>
+  <text x="590" y="454" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">to_Q / to_K / to_V</text>
+  <text x="590" y="480" fill="#5a6a8a" font-size="15" text-anchor="middle">3 × fp8 GEMM (CUTLASS sm89)</text>
+
+  <!-- ===================== K5 fusion region ===================== -->
+  <rect x="220" y="548" width="740" height="180" rx="10" fill="#8e6fd8" fill-opacity="0.18" stroke="#8e6fd8" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="238" y="576" fill="#1a1a1a" font-size="16" font-weight="bold">K5</text>
+
+  <rect x="290" y="592" width="600" height="64" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="626" fill="#1a1a1a" font-size="18" text-anchor="middle">QK-RMSNorm + 3-axis RoPE</text>
+
+  <text x="590" y="700" fill="#5a5a62" font-size="14" text-anchor="middle">axes [32,48,48] · GPT-J interleaved pairs</text>
+
+  <!-- ===================== Attention box ===================== -->
+  <rect x="270" y="756" width="640" height="90" rx="6" fill="#fdf6df" stroke="#e0a83c" stroke-width="2"/>
+  <text x="590" y="792" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">Scaled Dot-Product Attention</text>
+  <text x="590" y="818" fill="#8a763a" font-size="15" text-anchor="middle">fmha_cutlassF</text>
+
+  <!-- ===================== K2 fusion region ===================== -->
+  <rect x="220" y="878" width="740" height="120" rx="10" fill="#3d7be8" fill-opacity="0.18" stroke="#3d7be8" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="238" y="906" fill="#1a1a1a" font-size="16" font-weight="bold">K2</text>
+
+  <rect x="290" y="918" width="600" height="60" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="954" fill="#1a1a1a" font-size="18" text-anchor="middle">permute + FP8 row quant</text>
+
+  <!-- ===================== GEMM: to_out projection ===================== -->
+  <rect x="290" y="1030" width="600" height="88" rx="6" fill="#e8efff" stroke="#5b8def" stroke-width="2"/>
+  <text x="590" y="1064" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">to_out projection</text>
+  <text x="590" y="1090" fill="#5a6a8a" font-size="15" text-anchor="middle">fp8 GEMM</text>
+
+  <!-- ===================== M2 fusion region ===================== -->
+  <rect x="220" y="1158" width="740" height="230" rx="10" fill="#9b3fae" fill-opacity="0.18" stroke="#9b3fae" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="238" y="1186" fill="#1a1a1a" font-size="16" font-weight="bold">M2</text>
+  <text x="942" y="1186" fill="#1a1a1a" font-size="14" text-anchor="end">saves 8.2 GB HBM/gen</text>
+
+  <rect x="330" y="1200" width="520" height="56" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="1234" fill="#1a1a1a" font-size="18" text-anchor="middle">+ residual</text>
+
+  <rect x="290" y="1276" width="600" height="88" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="1312" fill="#1a1a1a" font-size="17" text-anchor="middle">RMSNorm + modulate</text>
+  <text x="590" y="1338" fill="#1a1a1a" font-size="17" text-anchor="middle">+ FP8 quant</text>
+
+  <!-- ===================== GEMM: w1/w3 projections ===================== -->
+  <rect x="270" y="1418" width="640" height="90" rx="6" fill="#e8efff" stroke="#5b8def" stroke-width="2"/>
+  <text x="590" y="1452" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">w1 / w3 projections</text>
+  <text x="590" y="1478" fill="#5a6a8a" font-size="15" text-anchor="middle">2 × fp8 GEMM → dim 10240</text>
+
+  <!-- ===================== K1 fusion region ===================== -->
+  <rect x="220" y="1540" width="740" height="120" rx="10" fill="#e07b2a" fill-opacity="0.18" stroke="#e07b2a" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="238" y="1568" fill="#1a1a1a" font-size="16" font-weight="bold">K1</text>
+
+  <rect x="270" y="1580" width="640" height="60" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="1616" fill="#1a1a1a" font-size="17" text-anchor="middle">SiLU(w1) * w3 + FP8 quant</text>
+
+  <!-- ===================== GEMM: w2 projection ===================== -->
+  <rect x="290" y="1692" width="600" height="88" rx="6" fill="#e8efff" stroke="#5b8def" stroke-width="2"/>
+  <text x="590" y="1726" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">w2 projection</text>
+  <text x="590" y="1752" fill="#5a6a8a" font-size="15" text-anchor="middle">fp8 GEMM</text>
+
+  <!-- ===================== M1 fusion region (extends past block boundary) ===================== -->
+  <rect x="220" y="1812" width="740" height="330" rx="10" fill="#0e8a78" fill-opacity="0.18" stroke="#0e8a78" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="238" y="1840" fill="#1a1a1a" font-size="16" font-weight="bold">M1</text>
+  <text x="942" y="1840" fill="#1a1a1a" font-size="14" text-anchor="end">saves 7.9 GB HBM/gen</text>
+
+  <rect x="270" y="1856" width="640" height="64" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="590" y="1892" fill="#1a1a1a" font-size="17" text-anchor="middle">gate * RMSNorm(out) + residual</text>
+
+  <!-- Block boundary line, spanning pipeline width, sits inside M1's dashed extent -->
+  <line x1="220" y1="1970" x2="1160" y2="1970" stroke="#7a7a82" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="1160" y="1962" fill="#5a5a62" font-size="15" font-style="italic" text-anchor="end">block boundary</text>
+
+  <!-- Ghosted next-block op box, still inside M1 region -->
+  <rect x="270" y="2000" width="640" height="80" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1" fill-opacity="0.35"/>
+  <text x="590" y="2032" fill="#5a5a62" font-size="16" text-anchor="middle">next block: adaLN modulate</text>
+  <text x="590" y="2056" fill="#5a5a62" font-size="16" text-anchor="middle">+ FP8 quant</text>
+
+  <!-- ===================== Residual connections (left side, dashed) ===================== -->
+  <!-- attention residual: from beside K0 down to M2 "+ residual" box -->
+  <path d="M 175 265 L 175 1228 L 216 1228" fill="none" stroke="#7a7a82" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <g transform="translate(150,760) rotate(-90)">
+    <text x="0" y="0" fill="#5a5a62" font-size="14" text-anchor="middle">attention residual</text>
+  </g>
+
+  <!-- FFN residual: from beside M2 down to M1 box -->
+  <path d="M 130 1273 L 130 1888 L 216 1888" fill="none" stroke="#7a7a82" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <g transform="translate(105,1590) rotate(-90)">
+    <text x="0" y="0" fill="#5a5a62" font-size="14" text-anchor="middle">FFN residual</text>
+  </g>
+
+  <!-- ===================== Legend panel, top-right ===================== -->
+  <rect x="1080" y="150" width="460" height="430" rx="10" fill="#f4f5f7" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="1106" y="188" fill="#1a1a1a" font-size="20" font-weight="bold">Legend</text>
+
+  <rect x="1106" y="206" width="20" height="20" fill="#e8efff" stroke="#5b8def" stroke-width="2"/>
+  <text x="1136" y="222" fill="#1a1a1a" font-size="15">fp8 GEMM (CUTLASS sm89)</text>
+
+  <rect x="1106" y="238" width="20" height="20" fill="#fdf6df" stroke="#e0a83c" stroke-width="2"/>
+  <text x="1136" y="254" fill="#1a1a1a" font-size="15">Attention (memory-efficient)</text>
+
+  <rect x="1106" y="270" width="20" height="20" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="1136" y="286" fill="#1a1a1a" font-size="15">Elementwise / norm</text>
+
+  <line x1="1106" y1="312" x2="1126" y2="312" stroke="#2e9e57" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="1136" y="317" fill="#1a1a1a" font-size="15">Owned Triton kernel</text>
+
+  <line x1="1106" y1="344" x2="1126" y2="344" stroke="#7a7a82" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="1136" y="349" fill="#1a1a1a" font-size="15">Residual connection</text>
+
+  <line x1="1106" y1="368" x2="1514" y2="368" stroke="#d8d8d8" stroke-width="1"/>
+
+  <text x="1106" y="396" fill="#5a5a62" font-size="14">
+    <tspan x="1106" dy="0">7 kernels fuse all ops between GEMMs and</tspan>
+    <tspan x="1106" dy="20">attention. K3, the seventh, covers the last</tspan>
+    <tspan x="1106" dy="20">block and refiner tail — not shown.</tspan>
+  </text>
+
+  <text x="1106" y="472" fill="#5a5a62" font-size="14">
+    <tspan x="1106" dy="0">GEMMs and attention are already</tspan>
+    <tspan x="1106" dy="20">hardware-optimal. Everything between</tspan>
+    <tspan x="1106" dy="20">them was not.</tspan>
+  </text>
+
+  <text x="1106" y="552" fill="#3a3a42" font-size="14" font-weight="bold">
+    <tspan x="1106" dy="0">The 35% elementwise cost was the target.</tspan>
+  </text>
+
+  <!-- ===================== Right-side italic note, mid-height ===================== -->
+  <text x="1310" y="900" fill="#5a5a62" font-size="16" font-style="italic" text-anchor="middle">
+    <tspan x="1310" dy="0">This block repeats 30 times.</tspan>
+    <tspan x="1310" dy="26">Every block is identical.</tspan>
+    <tspan x="1310" dy="26">One kernel set covers all 30.</tspan>
+  </text>
+
+</svg>

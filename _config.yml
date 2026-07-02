@@ -1,0 +1,34 @@
+# Site
+title: "Gaëtan Bervet"
+description: "Working notes on production machine-learning systems."
+author: "Gaëtan Bervet"
+theme: minima
+
+# Canonical URL (custom domain)
+url: "https://gaetanbervet.com"
+baseurl: ""
+
+# Header navigation (posts are listed on the home page)
+header_pages:
+  - about.md
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Display
+show_excerpts: true
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+
+# GitHub
+repository: GaetanBe/narcis-ai-technical-writeup
+
+twitter:
+  card: summary_large_image

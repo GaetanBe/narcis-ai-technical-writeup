@@ -1,0 +1,125 @@
+<svg viewBox="0 0 2000 1500" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Arial, sans-serif">
+  <rect x="0" y="0" width="2000" height="1500" fill="#1a1a1a"/>
+
+  <!-- Vertical divider -->
+  <line x1="1000" y1="90" x2="1000" y2="1330" stroke="#b0b0b8" stroke-width="2" stroke-dasharray="8 6" stroke-opacity="0.6"/>
+
+  <!-- Column titles -->
+  <text x="500" y="70" fill="#1a1a1a" font-size="24" font-weight="bold" text-anchor="middle">fp8, library path (unfused)</text>
+  <text x="1500" y="70" fill="#1a1a1a" font-size="24" font-weight="bold" text-anchor="middle">fp8, owned kernels</text>
+
+  <!-- ============================================================ -->
+  <!-- LEFT COLUMN -->
+  <!-- ============================================================ -->
+
+  <!-- connecting spine -->
+  <line x1="500" y1="120" x2="500" y2="1230" stroke="#cfcfd6" stroke-width="2"/>
+
+  <!-- 1. RMSNorm output -->
+  <rect x="290" y="110" width="420" height="60" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="500" y="146" fill="#1a1a1a" font-size="17" text-anchor="middle">RMSNorm output (bf16)</text>
+
+  <!-- 2. cast bf16 -> fp8 + scale (red) -->
+  <rect x="260" y="204" width="420" height="66" rx="6" fill="#fdecec" stroke="#d9453a" stroke-width="2"/>
+  <text x="470" y="232" fill="#7a1f18" font-size="16" text-anchor="middle">cast bf16 → fp8 + compute scale</text>
+  <text x="470" y="254" fill="#7a1f18" font-size="14" text-anchor="middle"> </text>
+  <rect x="700" y="220" width="66" height="34" rx="17" fill="#fbdada" stroke="#d9453a" stroke-width="1.5"/>
+  <text x="733" y="242" fill="#7a1f18" font-size="13" text-anchor="middle">→ HBM</text>
+
+  <!-- 3. fp8 activation -->
+  <rect x="290" y="322" width="420" height="60" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="500" y="358" fill="#1a1a1a" font-size="17" text-anchor="middle">fp8 activation</text>
+
+  <!-- 4. Tensor Core GEMM (yellow) -->
+  <rect x="250" y="416" width="500" height="88" rx="6" fill="#fdf6df" stroke="#e0a83c" stroke-width="2"/>
+  <text x="500" y="452" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">Tensor Core GEMM</text>
+  <text x="500" y="478" fill="#8a763a" font-size="15" text-anchor="middle">fp8 × fp8 → bf16 out</text>
+
+  <!-- 5. bf16 output -->
+  <rect x="260" y="538" width="420" height="60" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="460" y="574" fill="#1a1a1a" font-size="17" text-anchor="middle">bf16 output</text>
+  <rect x="700" y="546" width="66" height="34" rx="17" fill="#fbdada" stroke="#d9453a" stroke-width="1.5"/>
+  <text x="733" y="568" fill="#7a1f18" font-size="13" text-anchor="middle">→ HBM</text>
+
+  <!-- 6. elementwise ops (bf16) -->
+  <rect x="240" y="632" width="420" height="60" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="440" y="668" fill="#1a1a1a" font-size="17" text-anchor="middle">elementwise ops (bf16)</text>
+  <rect x="678" y="640" width="66" height="34" rx="17" fill="#fbdada" stroke="#d9453a" stroke-width="1.5"/>
+  <text x="711" y="662" fill="#7a1f18" font-size="13" text-anchor="middle">→ HBM</text>
+
+  <!-- 7. cast bf16 -> fp8 + scale (red) again -->
+  <rect x="260" y="726" width="420" height="66" rx="6" fill="#fdecec" stroke="#d9453a" stroke-width="2"/>
+  <text x="470" y="754" fill="#7a1f18" font-size="16" text-anchor="middle">cast bf16 → fp8 + compute scale</text>
+  <rect x="700" y="742" width="66" height="34" rx="17" fill="#fbdada" stroke="#d9453a" stroke-width="1.5"/>
+  <text x="733" y="764" fill="#7a1f18" font-size="13" text-anchor="middle">→ HBM</text>
+
+  <!-- 8. Next Tensor Core GEMM (yellow) -->
+  <rect x="250" y="844" width="500" height="88" rx="6" fill="#fdf6df" stroke="#e0a83c" stroke-width="2"/>
+  <text x="500" y="888" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">Next Tensor Core GEMM</text>
+
+  <!-- Bottom summary box (red) -->
+  <rect x="220" y="990" width="560" height="120" rx="10" fill="#fdecec" stroke="#d9453a" stroke-width="2"/>
+  <text x="500" y="1036" fill="#7a1f18" font-size="19" font-weight="bold" text-anchor="middle">5 HBM round-trips between 2 GEMMs</text>
+  <text x="500" y="1068" fill="#7a1f18" font-size="16" text-anchor="middle">Each a separate CUDA kernel launch</text>
+
+  <!-- ============================================================ -->
+  <!-- RIGHT COLUMN -->
+  <!-- ============================================================ -->
+
+  <line x1="1500" y1="120" x2="1500" y2="1230" stroke="#cfcfd6" stroke-width="2"/>
+
+  <!-- 1. Owned Triton kernel K0 (green) -->
+  <rect x="1250" y="106" width="500" height="118" rx="10" fill="#e7f5ec" stroke="#2e9e57" stroke-width="2"/>
+  <text x="1500" y="140" fill="#1c6b3c" font-size="18" font-weight="bold" text-anchor="middle">Owned Triton kernel (K0)</text>
+  <text x="1500" y="168" fill="#1a1a1a" font-size="16" text-anchor="middle">RMSNorm + modulate + FP8 quant</text>
+  <text x="1500" y="194" fill="#5a5a62" font-size="14" text-anchor="middle">one kernel, one write, output is fp8</text>
+
+  <!-- 2. fp8 activation -->
+  <rect x="1290" y="266" width="420" height="60" rx="6" fill="#f2f3f5" stroke="#dcdfe4" stroke-width="1"/>
+  <text x="1500" y="302" fill="#1a1a1a" font-size="17" text-anchor="middle">fp8 activation</text>
+  <text x="1500" y="346" fill="#5a5a62" font-size="14" text-anchor="middle">typically still in L2 from the kernel above</text>
+
+  <!-- 3. Tensor Core GEMM (yellow) -->
+  <rect x="1250" y="392" width="500" height="88" rx="6" fill="#fdf6df" stroke="#e0a83c" stroke-width="2"/>
+  <text x="1500" y="428" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">Tensor Core GEMM</text>
+  <text x="1500" y="454" fill="#8a763a" font-size="15" text-anchor="middle">fp8 × fp8 → bf16 out</text>
+
+  <!-- 4. Owned Triton kernel K1/M2 (green) -->
+  <rect x="1250" y="520" width="500" height="132" rx="10" fill="#e7f5ec" stroke="#2e9e57" stroke-width="2"/>
+  <text x="1500" y="556" fill="#1c6b3c" font-size="18" font-weight="bold" text-anchor="middle">Owned Triton kernel (K1 / M2 / …)</text>
+  <text x="1500" y="584" fill="#1a1a1a" font-size="16" text-anchor="middle">elementwise + FP8 re-quant</text>
+  <text x="1500" y="610" fill="#5a5a62" font-size="14" text-anchor="middle">bf16 in, fp8 out, one write</text>
+  <text x="1500" y="632" fill="#5a5a62" font-size="14" text-anchor="middle"> </text>
+
+  <!-- 5. Next Tensor Core GEMM (yellow) -->
+  <rect x="1250" y="704" width="500" height="88" rx="6" fill="#fdf6df" stroke="#e0a83c" stroke-width="2"/>
+  <text x="1500" y="748" fill="#1a1a1a" font-size="19" text-anchor="middle" font-weight="bold">Next Tensor Core GEMM</text>
+
+  <!-- Bottom summary box (green) -->
+  <rect x="1220" y="990" width="560" height="120" rx="10" fill="#e7f5ec" stroke="#2e9e57" stroke-width="2"/>
+  <text x="1500" y="1036" fill="#1c6b3c" font-size="19" font-weight="bold" text-anchor="middle">2 HBM writes between 2 GEMMs</text>
+  <text x="1500" y="1068" fill="#1c6b3c" font-size="16" text-anchor="middle">Intermediates never materialize to HBM</text>
+
+  <!-- connecting lines between boxes, right column -->
+  <line x1="1500" y1="224" x2="1500" y2="266" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="1500" y1="326" x2="1500" y2="392" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="1500" y1="480" x2="1500" y2="520" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="1500" y1="652" x2="1500" y2="704" stroke="#cfcfd6" stroke-width="2"/>
+
+  <!-- connecting lines, left column -->
+  <line x1="500" y1="170" x2="500" y2="204" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="500" y1="270" x2="500" y2="322" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="500" y1="382" x2="500" y2="416" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="500" y1="504" x2="500" y2="538" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="500" y1="598" x2="500" y2="632" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="500" y1="692" x2="500" y2="726" stroke="#cfcfd6" stroke-width="2"/>
+  <line x1="500" y1="792" x2="500" y2="844" stroke="#cfcfd6" stroke-width="2"/>
+
+  <!-- Footer -->
+  <text x="1000" y="1382" fill="#1a1a1a" font-size="24" font-weight="bold" text-anchor="middle">The dtype churn that was 10% of GPU time is gone.</text>
+  <text x="1000" y="1416" fill="#5a5a62" font-size="16" text-anchor="middle">
+    <tspan x="1000" dy="0">Every cast, every intermediate tensor, every standalone scale computation</tspan>
+    <tspan x="1000" dy="24">absorbed into the kernel that produces the data.</tspan>
+  </text>
+
+</svg>

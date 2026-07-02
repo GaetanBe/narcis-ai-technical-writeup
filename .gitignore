@@ -1,0 +1,17 @@
+# Jekyll build artifacts
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+Gemfile.lock
+
+# Local source material — keep prior-platform docs out of this public repo
+assets/kamino-data-platform-comprehensive-documentation.md
+assets/monitoring-operations-doc.md
+assets/platform-core-philosophy.md
+assets/platform-introduction.md
+assets/superset-confluence-documentation.md
+assets/superset-documentation-notes.md
+
+# OS / editor
+.DS_Store

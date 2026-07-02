@@ -1,0 +1,73 @@
+<svg viewBox="0 0 2000 1200" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Arial, sans-serif">
+  <rect x="0" y="0" width="2000" height="1200" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="90" y="80" fill="#1a1a1a" font-size="26" font-weight="bold">1.75 s &#8594; 0.687 s per step</text>
+  <text x="90" y="112" fill="#5a5a62" font-size="15">roughly three weeks from first trace to flag collapse</text>
+
+  <!-- Baseline axis -->
+  <line x1="90" y1="850" x2="1930" y2="850" stroke="#d8d8dc" stroke-width="1.5"/>
+  <text x="70" y="855" fill="#5a5a62" font-size="13" text-anchor="end">0 s</text>
+
+  <!-- vertical axis label -->
+  <text x="40" y="520" fill="#5a5a62" font-size="14" text-anchor="middle" transform="rotate(-90 40 520)">seconds per step</text>
+
+  <!-- ============ STEPPED LINE ============ -->
+  <!-- plateau 0: y=200, x 90-490 -->
+  <!-- drop to y=441.4 at x 490-570 -->
+  <!-- plateau 1: y=441.4, x 570-970 -->
+  <!-- drop to y=560.3 at x 970-1050 -->
+  <!-- plateau 2: y=560.3, x 1050-1450 -->
+  <!-- drop to y=594.8 at x 1450-1530 -->
+  <!-- plateau 3: y=594.8, x 1530-1930 -->
+  <polyline points="90,200 490,200 490,441.4 570,441.4 570,441.4 970,441.4 970,560.3 1050,560.3 1050,560.3 1450,560.3 1450,594.8 1530,594.8 1530,594.8 1930,594.8"
+            fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- markers at plateau starts -->
+  <circle cx="90" cy="200" r="5" fill="#1a1a1a"/>
+  <circle cx="570" cy="441.4" r="5" fill="#1a1a1a"/>
+  <circle cx="1050" cy="560.3" r="5" fill="#1a1a1a"/>
+  <circle cx="1530" cy="594.8" r="5" fill="#1a1a1a"/>
+
+  <!-- ============ DROP DELTA ANNOTATIONS ============ -->
+  <text x="530" y="325" fill="#5a5a62" font-size="16" text-anchor="middle">&#8722;37%</text>
+  <text x="1010" y="505" fill="#5a5a62" font-size="16" text-anchor="middle">&#8722;29%</text>
+  <text x="1490" y="582" fill="#5a5a62" font-size="16" text-anchor="middle">&#8722;12%</text>
+
+  <!-- ============ PLATEAU LABEL BLOCKS (below axis, aligned to plateau centers) ============ -->
+  <!-- Plateau 1: center x=290 -->
+  <line x1="290" y1="850" x2="290" y2="890" stroke="#6a6a70" stroke-width="1.5"/>
+  <text x="290" y="920" fill="#1a1a1a" font-size="24" font-weight="bold" text-anchor="middle">1.75 s</text>
+  <text x="290" y="950" fill="#5a5a62" font-size="16" text-anchor="middle">Baseline</text>
+  <text x="290" y="975" fill="#5a5a62" font-size="15" text-anchor="middle">diffusers + nf4 (bitsandbytes)</text>
+
+  <!-- Plateau 2: center x=770 -->
+  <line x1="770" y1="850" x2="770" y2="890" stroke="#6a6a70" stroke-width="1.5"/>
+  <text x="770" y="920" fill="#1a1a1a" font-size="24" font-weight="bold" text-anchor="middle">~1.1 s</text>
+  <text x="770" y="950" fill="#5a5a62" font-size="16" text-anchor="middle">Trimming</text>
+  <text x="770" y="975" fill="#5a5a62" font-size="15" text-anchor="middle">vendored transformer &#183; nf4 removed</text>
+  <text x="770" y="997" fill="#5a5a62" font-size="15" text-anchor="middle">PEFT removed &#183; fp8 W8A8 rowwise</text>
+
+  <!-- Plateau 3: center x=1250 -->
+  <line x1="1250" y1="850" x2="1250" y2="890" stroke="#6a6a70" stroke-width="1.5"/>
+  <text x="1250" y="920" fill="#1a1a1a" font-size="24" font-weight="bold" text-anchor="middle">0.78 s</text>
+  <text x="1250" y="950" fill="#5a5a62" font-size="16" text-anchor="middle">torch.compile</text>
+  <text x="1250" y="975" fill="#5a5a62" font-size="15" text-anchor="middle">Inductor fuses part of the elementwise chains</text>
+  <text x="1250" y="997" fill="#5a5a62" font-size="15" text-anchor="middle">read as a teacher, not shipped</text>
+
+  <!-- Plateau 4: center x=1730 -->
+  <line x1="1730" y1="850" x2="1730" y2="890" stroke="#6a6a70" stroke-width="1.5"/>
+  <text x="1730" y="920" fill="#1a1a1a" font-size="24" font-weight="bold" text-anchor="middle">0.687 s</text>
+  <text x="1730" y="950" fill="#5a5a62" font-size="16" text-anchor="middle">Owned kernels</text>
+  <text x="1730" y="975" fill="#5a5a62" font-size="15" text-anchor="middle">seven Triton kernels, integrated one at a time</text>
+  <text x="1730" y="997" fill="#5a5a62" font-size="15" text-anchor="middle">flag collapse: fallbacks deleted</text>
+
+  <!-- ============ CODA BOX ============ -->
+  <rect x="1490" y="1030" width="440" height="80" fill="none" stroke="#6a6a70" stroke-width="1"/>
+  <text x="1710" y="1058" fill="#5a5a62" font-size="14" text-anchor="middle">Post-collapse check: compiled 0.701 s vs eager 0.687 s.</text>
+  <text x="1710" y="1082" fill="#5a5a62" font-size="14" text-anchor="middle">The compiler had nothing left to contribute. Removed.</text>
+
+  <!-- ============ BOTTOM LINE ============ -->
+  <text x="1000" y="1165" fill="#5a5a62" font-size="16" text-anchor="middle">2.55&#215; per step &#183; transformer stage per image: ~15.8 s &#8594; 6.7 s measured wall time</text>
+
+</svg>
