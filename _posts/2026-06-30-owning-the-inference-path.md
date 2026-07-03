@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Beating torch.compile: Seven Owned Triton Kernels, 2.5x on Z-Image"
+title: "Owning the Inference Path: Handwritten fp8 Kernels, 2.5x Cheaper GPU Inference"
 date: 2026-06-30
-excerpt: "torch.compile is usually where a PyTorch optimization story ends. Here it is the beginning: read Inductor's generated Triton as a teacher, then write seven owned fp8 kernels that outrun the compiler itself — 1.75s to 0.687s per step on a 6.15B-parameter diffusion transformer, in production on NVIDIA L4."
+excerpt: "An image-generation product lives or dies by its GPU bill. This is how per-image compute on Narcis fell 2.5x — no new model, no extra hardware: strip the library stack, use torch.compile as a teacher, and replace it with seven handwritten fp8 Triton kernels. 1.75s to 0.687s per step on a 6.15B diffusion transformer, serving production on NVIDIA L4 today."
 ---
 
 ## Context
 
-Narcis is a project that uses diffusion models and face conditioning to produce portraits that preserve facial features. In an earlier article I explained how the first version was built, using a two-stage process: a base generation and a face-area differential diffusion.
+[Narcis](https://narcis.ai) is a production service that uses diffusion models and face conditioning to produce portraits that preserve facial features. In an earlier article I explained how the first version was built, using a two-stage process: a base generation and a face-area differential diffusion.
 
 It was built on SDXL, a well-established open-weights model that pioneered the field. Its community converged on a rich set of methods — LoRAs, ControlNets, schedulers, prompt engineering — but none of them touched the inference compute itself. For a reason: SDXL's UNet is too irregular for systematic fusion, and its conditioning is so weak that seeds, the random noise initiating the latent at the start of the process, carry more weight on the output than most tokens in the prompt.
 
@@ -21,7 +21,7 @@ This was the architecture and the open-source commitment I was waiting for.
 
 Libraries are general tooling, and the price for that generality is at every call site. When you have fixed hardware, a single model, and the willingness to go deeper, you can skip every layer that was written for someone else's problem.
 
-This article is about doing exactly that. I run a 6.15B-parameter diffusion transformer on NVIDIA L4 GPUs, a chip with native fp8 tensor cores that the standard diffusion tooling leaves unused. The model runs in production on AWS g6 instances. Compute is scarce, and every millisecond of inference is money.
+This article is about doing exactly that. I run a 6.15B-parameter diffusion transformer on NVIDIA L4 GPUs, a chip with native fp8 tensor cores that the standard diffusion tooling leaves unused. The model runs in production on AWS g6 instances. The GPU fleet is the largest line on the bill, and per-step time is the unit price of every image: 2.5x on that number means the same instance serves 2.5x the demand.
 
 I cut the per-step inference time from 1.75 seconds to 0.687 seconds, 2.5x, without changing the model. No new architecture, no distillation, no quantization-aware training. The method was:
 
